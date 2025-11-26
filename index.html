@@ -196,7 +196,7 @@
                  <img src="https://placehold.co/96x96/06b6d4/FFFFFF?text=KS.v1&font=roboto" alt="Logo" class="relative h-24 w-24 rounded-2xl shadow-2xl border border-cyan-500/50">
             </div>
             <h2 class="text-3xl font-extrabold text-white mb-1 tracking-tight app-title-color">StudioKreator AI</h2>
-            <p class="text-cyan-400/60 text-[10px] uppercase tracking-[0.2em] mb-8">System Access Control studiokreator.v1</p>
+            <p class="text-green-400/60 text-[10px] uppercase tracking-[0.2em] mb-8">System Access Control studiokreator.v1</p>
             
             <input type="password" id="appPasswordInput" class="w-full input-field rounded-none border-x-0 border-t-0 border-b border-slate-600 bg-transparent p-3 mb-6 text-center tracking-widest font-bold text-cyan-400 focus:border-cyan-400 transition-all placeholder-slate-700" placeholder="ENTER PASSCODE" autofocus>
             
@@ -558,6 +558,10 @@
             <h2 class="text-xl font-bold mb-4 text-cyan-400">System Config</h2>
             <input type="password" id="apiKeyInput" placeholder="Google AI API Key (Opsional / Otomatis)" class="w-full input-field rounded-lg p-3 mb-4">
             <div class="flex justify-end gap-2">
+                <p class="text-xs text-gray-500 mt-2">
+                    Jika generator mengalami error, gunakan API key pribadi.
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:underline">Dapatkan key gratis di Google AI Studio</a>.
+                </p>
                 <button id="closeSettingsModalBtn" class="btn btn-secondary px-4 rounded-lg">Close</button>
                 <button id="saveApiKeyBtn" class="btn btn-primary px-4 rounded-lg">Save Config</button>
             </div>
