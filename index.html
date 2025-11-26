@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudioKreator Ai - Future Content Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Added Orbitron for futuristic headers -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Rajdhani', sans-serif; /* Tech/Sci-Fi Font */
+            background-color: #020617; /* Very Dark Blue/Black */
+            /* Futuristic Cyber Grid Background */
+            background-image: 
+                linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15) 0%, transparent 60%);
+            background-size: 40px 40px, 40px 40px, 100% 100%;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        /* Futuristic Glow Effects */
+        .glow-text { text-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
+        .glow-box { box-shadow: 0 0 15px rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.3); }
+        
+        h1, h2, h3, h4, h5, .brand-font { font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em; }
+        
+        .btn { transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .btn:active:not(:disabled) { transform: scale(0.95); }
+        
+        /* Primary Button: Neon Cyan */
+        .btn-primary { 
+            background: linear-gradient(90deg, #0891b2, #06b6d4); 
+            color: white; 
+            border: 1px solid #22d3ee;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); 
+        }
+        .btn-primary:hover:not(:disabled) { 
+            background: linear-gradient(90deg, #06b6d4, #22d3ee); 
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.6); 
+        }
+        
+        .btn-success { background-color: #059669; color: white; border: 1px solid #10b981; }
+        .btn-success:hover:not(:disabled) { background-color: #047857; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        
+        /* Secondary: Glassmorphism */
+        .btn-secondary { 
+            background: rgba(30, 41, 59, 0.7); 
+            color: #94a3b8; 
+            border: 1px solid #334155; 
+            backdrop-filter: blur(4px);
+        } 
+        .btn-secondary:hover:not(:disabled) { 
+            background: rgba(51, 65, 85, 0.8); 
+            color: #e2e8f0; 
+            border-color: #06b6d4;
+        } 
+        
+        /* AI Magic Button: Purple/Pink Neon */
+        .btn-ai { 
+            background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%); 
+            color: white; 
+            box-shadow: 0 0 15px rgba(217, 70, 239, 0.3); 
+            border: 1px solid #e879f9;
+        } 
+        .btn-ai:hover:not(:disabled) { 
+            box-shadow: 0 0 25px rgba(217, 70, 239, 0.6); 
+            filter: brightness(1.1);
+        }
+        
+        /* Veo Button */
+        .btn-veo { background: linear-gradient(45deg, #ec4899, #f43f5e); color: white; border: 1px solid #fb7185; }
+        .btn-veo:hover:not(:disabled) { box-shadow: 0 0 15px rgba(244, 63, 94, 0.5); }
+
+        /* Video Import Button */
+        .btn-video-import { background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%); color: white; border: 1px solid #f87171; }
+        .btn-video-import:hover:not(:disabled) { box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+        
+        .loader, .inline-loader {
+            border: 3px solid rgba(6, 182, 212, 0.2); border-top: 3px solid #06b6d4; 
+            border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+        .inline-loader {
+            width: 20px; height: 20px; border-width: 2px;
+            border-top-color: #fff; border-left-color: #fff; border-right-color: #fff; border-bottom-color: transparent; box-shadow: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .tab-btn { 
+            border-bottom: 2px solid transparent; color: #64748b; 
+            font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em;
+        } 
+        .tab-btn.active { 
+            border-bottom-color: #06b6d4; color: #22d3ee; 
+            text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+        } 
+        
+        .prompt-output { 
+            font-family: 'Roboto Mono', monospace;
+            background-color: #0b1120; border: 1px solid #1e293b;
+            white-space: pre-wrap; word-wrap: break-word; 
+            font-size: 0.8rem; line-height: 1.6; color: #94a3b8; 
+        }
+        
+        .custom-modal-overlay {
+            position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.9);
+            display: none; align-items: center; justify-content: center; z-index: 50;
+            opacity: 0; transition: opacity 0.3s ease-in-out; pointer-events: none; backdrop-filter: blur(8px);
+        }
+        .custom-modal-overlay.visible { display: flex; opacity: 1; pointer-events: auto; }
+        .custom-modal-content {
+            background-color: #0f172a; border-radius: 1rem;
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.15);
+            padding: 2rem; max-width: 90%; width: 500px; 
+            border: 1px solid rgba(6, 182, 212, 0.3); 
+            transform: scale(0.95); transition: transform 0.3s ease-in-out; color: #f8fafc;
+        }
+        .custom-modal-overlay.visible .custom-modal-content { transform: scale(1); }
+        
+        .main-card {
+            background-color: rgba(15, 23, 42, 0.8); /* Semi-transparent slate */
+            border-radius: 1rem;
+            border: 1px solid rgba(51, 65, 85, 0.8); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+        }
+        
+        .app-title-color { 
+            background: linear-gradient(to right, #22d3ee, #e879f9); 
+            -webkit-background-clip: text; 
+            background-clip: text; 
+            color: transparent; 
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+        } 
+        
+        .input-field {
+            background-color: #020617; border: 1px solid #334155; color: #f8fafc; 
+            transition: border-color 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #06b6d4; outline: none; box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+        label { color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; font-family: 'Orbitron', sans-serif; }
+        h2, h3, h4, h5 { color: #f1f5f9; }
+        p { color: #cbd5e1; }
+        
+        /* Wardrobe pill style */
+        .wardrobe-pill {
+            cursor: pointer; padding: 0.5rem; border: 1px solid #334155;
+            border-radius: 0.5rem; font-size: 0.75rem; transition: all 0.2s;
+            background: #0f172a; color: #94a3b8;
+        }
+        .wardrobe-pill:hover { border-color: #06b6d4; color: #22d3ee; box-shadow: 0 0 5px rgba(6, 182, 212, 0.2); }
+        .wardrobe-pill.active { background: rgba(6, 182, 212, 0.15); border-color: #06b6d4; color: #22d3ee; font-weight: bold; }
+
+        /* Radio Toggle Style */
+        .toggle-radio { display: none; }
+        .toggle-label {
+            cursor: pointer; padding: 0.75rem 1rem; border: 1px solid #334155;
+            background-color: #0f172a; color: #64748b; font-size: 0.75rem; font-weight: 600;
+            transition: all 0.2s; flex-grow: 1; text-align: center; font-family: 'Orbitron', sans-serif;
+        }
+        .toggle-label:first-of-type { border-radius: 0.5rem 0 0 0.5rem; }
+        .toggle-label:last-of-type { border-radius: 0 0.5rem 0.5rem 0; }
+        .toggle-radio:checked + .toggle-label {
+            background-color: rgba(6, 182, 212, 0.1); color: #22d3ee; border-color: #06b6d4;
+            box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-200">
+
+    <!-- PASSWORD GATE MODAL -->
+    <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black/90 backdrop-blur-xl">
+        <div class="main-card p-10 max-w-sm w-full text-center border-cyan-500/30 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"></div>
+            <div class="mb-8 flex justify-center relative">
+                 <div class="absolute inset-0 bg-cyan-500 blur-3xl opacity-20 rounded-full"></div>
+                 <img src="https://placehold.co/96x96/06b6d4/FFFFFF?text=KS.v1&font=roboto" alt="Logo" class="relative h-24 w-24 rounded-2xl shadow-2xl border border-cyan-500/50">
+            </div>
+            <h2 class="text-3xl font-extrabold text-white mb-1 tracking-tight app-title-color">StudioKreator AI</h2>
+            <p class="text-cyan-400/60 text-[10px] uppercase tracking-[0.2em] mb-8">System Access Control studiokreator.v1</p>
+            
+            <input type="password" id="appPasswordInput" class="w-full input-field rounded-none border-x-0 border-t-0 border-b border-slate-600 bg-transparent p-3 mb-6 text-center tracking-widest font-bold text-cyan-400 focus:border-cyan-400 transition-all placeholder-slate-700" placeholder="ENTER PASSCODE" autofocus>
+            
+            <button id="loginBtn" class="btn btn-primary w-full py-3 rounded-lg font-bold uppercase tracking-widest text-sm">Initialize System</button>
+            <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono border border-red-900/50 bg-red-900/10 p-2 rounded">ACCESS DENIED: INVALID CREDENTIALS</p>
+            <p class="text-[10px] text-slate-600 mt-8 font-mono">System v1.0</p>
+        </div>
+    </div>
+
+    <div id="app-wrapper" class="fade-in hidden">
+        <header class="py-4 px-4 md:px-8 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto flex justify-between items-center main-card p-3 border-cyan-900/30">
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <img src="https://placehold.co/96x96/06b6d4/FFFFFF?text=KS&font=roboto" alt="KreatorStudio Logo" class="h-10 w-10 rounded-md shadow-lg border border-cyan-500/50">
+                        <div class="absolute -bottom-1 -right-1 bg-cyan-600 text-[8px] font-bold px-1 rounded border border-black text-white uppercase tracking-wide">PRO</div>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight flex flex-col items-start leading-none">
+                        <span class="app-title-color tracking-tighter">KreatorStudio.AI</span>
+                        <span class="text-[9px] text-cyan-600 font-mono font-bold tracking-[0.3em] uppercase">Generative Suite</span>
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3">
+                        <button id="importProjectBtn" class="btn btn-secondary font-semibold py-2 px-4 rounded-lg text-xs md:text-sm hidden md:block">Impor</button>
+                        <button id="exportProjectBtn" class="btn btn-secondary font-semibold py-2 px-4 rounded-lg text-xs md:text-sm hidden md:block">Ekspor</button>
+                        <button id="resetProjectBtn" class="btn btn-primary font-bold py-2 px-4 rounded-lg text-xs md:text-sm tracking-wide border-none bg-red-600 hover:bg-red-700 shadow-red-500/20">RESET</button>
+                        <button id="openSettingsBtn" class="btn btn-secondary p-2 rounded-lg hover:border-cyan-400 hover:text-cyan-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16"><path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311a1.464 1.464 0 0 1 0 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l-.169-.311a1.464 1.464 0 0 1 0-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105 0l-.17-.31zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/></svg>
+                        </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-col md:flex-row max-w-7xl mx-auto gap-6 p-4 md:p-6">
+            
+            <!-- LEFT SIDEBAR -->
+            <aside class="w-full md:w-1/3 lg:w-1/4 space-y-6 flex-shrink-0">
+                
+                <!-- SECTION: CHARACTER -->
+                <div id="characterSection" class="main-card border-l-4 border-l-purple-500">
+                    <div class="p-4 flex justify-between items-center border-b border-slate-800">
+                        <h2 class="text-sm font-bold text-purple-400 uppercase tracking-widest">Pemeran (Cast)</h2>
+                        <span class="bg-purple-900/30 text-purple-400 text-[9px] border border-purple-500/30 font-bold px-2 py-0.5 rounded full font-mono">REQUIRED</span>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div id="charListContainer" class="space-y-2 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+                            <!-- Character list items will appear here -->
+                        </div>
+                        <button id="openAddCharModalBtn" class="btn btn-secondary text-xs font-bold py-3 px-4 rounded-lg w-full flex items-center justify-center gap-2 border-dashed border-slate-600 hover:border-purple-500 hover:text-purple-400 hover:bg-purple-900/10 transition-colors font-mono">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16"><path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/></svg>
+                            + NEW CASTING
+                        </button>
+                        
+                        <div class="pt-4 mt-4 border-t border-slate-800">
+                            <h3 class="text-[9px] font-bold uppercase text-slate-500 mb-3 tracking-[0.2em] font-mono">Actor Presets</h3>
+                            <div id="templateCharList" class="space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION: DIRECTING -->
+                <div id="directingSection" class="main-card border-l-4 border-l-cyan-500">
+                    <div class="p-4 border-b border-slate-800">
+                        <h2 class="text-sm font-bold text-cyan-400 uppercase tracking-widest">Artistic Direction</h2>
+                    </div>
+                    <div class="p-4 space-y-5">
+                          
+                          <!-- Visual Style Selector -->
+                          <div>
+                            <label for="visualStyleSet" class="block mb-2 flex items-center gap-2 text-cyan-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-palette-fill" viewBox="0 0 16 16"><path d="M12.433 10.07C14.133 10.585 16 11.15 16 8a8 8 0 1 0-8 8c1.996 0 1.826-1.504 1.649-3.08-.124-1.101-.252-2.237.351-2.92.465-.527 1.42-.237 2.433.07zM8 5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4.5 3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm.5 6.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+                                Visual Style
+                            </label>
+                            <select id="visualStyleSet" class="w-full input-field rounded-lg p-2.5 text-xs font-bold text-cyan-400 border-cyan-500/30">
+                                <option value="realistic">Hyper Realistic (Cinematic)</option>
+                                <option value="motion_clay">Motion Clay (Stop Motion)</option>
+                                <option value="3d_pixar">3D Animation (Pixar Style)</option>
+                                <option value="anime">Anime / Manga (2D)</option>
+                                <option value="low_poly">Low Poly (Retro Game)</option>
+                                <option value="retro_vhs">Vintage 90s (VHS Glitch)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- NEW: Voice Selector -->
+                        <div>
+                            <label for="narratorVoiceSet" class="block mb-2 flex items-center gap-2 text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16"><path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/><path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/></svg>
+                                Voiceover Persona
+                            </label>
+                            <select id="narratorVoiceSet" class="w-full input-field rounded-lg p-2.5 text-xs font-bold text-slate-300">
+                                <option value="pria_dewasa_berwibawa">Male (Deep/Authoritative)</option>
+                                <option value="pria_muda_semangat">Male (Young/Energetic)</option>
+                                <option value="wanita_profesional_berita">Female (Professional News)</option>
+                                <option value="wanita_ceria_storyteller">Female (Soft Storyteller)</option>
+                                <option value="anak_laki_petualang">Boy (Adventure/Unique)</option>
+                                <option value="kakek_bijak">Old Man (Wise/Mystery)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="timeSettingInput" class="block mb-2 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg>
+                                Timeline / Era
+                            </label>
+                            <input type="text" id="timeSettingInput" class="w-full input-field rounded-lg p-2.5 text-xs placeholder-slate-600" placeholder="e.g., 2077 Cyberpunk City, 1945 Java...">
+                        </div>
+
+                        <div>
+                            <label for="locationSet" class="block mb-2 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/><path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+                                Set Location
+                            </label>
+                            <select id="locationSet" class="w-full input-field rounded-lg p-2.5 text-xs">
+                                <option value="custom_location" selected>📍 Custom Location...</option>
+                                <optgroup label="Modern Studio">
+                                    <option value="Studio Podcast Modern">Modern Podcast Studio</option>
+                                    <option value="News Room TV">TV News Room</option>
+                                    <option value="Green Screen Overlay">Green Screen</option>
+                                </optgroup>
+                                <optgroup label="Fantasy & History">
+                                    <option value="Kerajaan Majapahit">Majapahit Kingdom</option>
+                                    <option value="Cyberpunk City Jakarta">Neo-Jakarta 2077</option>
+                                    <option value="Mars Colony Base">Mars Colony</option>
+                                </optgroup>
+                            </select>
+                            <input type="text" id="customLocationInput" class="w-full input-field rounded-lg p-2.5 text-xs mt-2" placeholder="Type custom location...">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="cameraStyleSet" class="block mb-1">Lens</label>
+                                <select id="cameraStyleSet" class="w-full input-field rounded-lg p-2 text-[10px]">
+                                    <option value="standard_cinematic">Cinematic 35mm</option>
+                                    <option value="wide_angle">Wide Angle 16mm</option>
+                                    <option value="telephoto">Telephoto 85mm</option>
+                                    <option value="drone_fpv">Drone FPV</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="videoOrientationSet" class="block mb-1">Ratio</label>
+                                <select id="videoOrientationSet" class="w-full input-field rounded-lg p-2 text-[10px]">
+                                    <option value="vertical_9_16">9:16 (Reels/Shorts)</option>
+                                    <option value="landscape_16_9">16:9 (Cinema)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <main class="w-full md:w-2/3 lg:w-3/4 main-card min-h-[600px] flex flex-col border-t-4 border-t-cyan-500 relative">
+                <div class="absolute top-0 left-0 w-full h-full bg-cyan-500/5 pointer-events-none z-0"></div>
+                
+                <div id="tabsContainer" class="border-b border-slate-800 flex bg-slate-900/50 z-10">
+                    <button id="tabNaskah" class="tab-btn active font-bold py-4 px-6 text-sm md:text-base flex items-center gap-2 transition-colors hover:bg-slate-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16"><path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/></svg>
+                        Script Generator
+                    </button>
+                    <button id="tabStoryboard" class="tab-btn font-bold py-4 px-6 text-sm md:text-base flex items-center gap-2 transition-colors hover:bg-slate-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-film" viewBox="0 0 16 16"><path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"/></svg>
+                        Visual Storyboard
+                    </button>
+                </div>
+
+                <!-- VIEW 1: NASKAH -->
+                <div id="naskahView" class="p-6 space-y-6 flex-grow flex flex-col z-10">
+                    <div class="bg-slate-800/50 p-5 rounded-xl border border-cyan-500/20 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                        <h3 class="text-sm font-bold text-cyan-400 mb-4 flex items-center gap-2 uppercase tracking-wide">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stars" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.734 1.734 0 0 0 2.31 4.206l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a.968.968 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a.968.968 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"/></svg>
+                            Content Ideation
+                        </h3>
+                        
+                        <!-- NEW: Content Mode Selector -->
+                        <div class="flex rounded-lg overflow-hidden mb-4 border border-slate-600">
+                            <input type="radio" id="modeTimeTravel" name="contentMode" value="story" class="toggle-radio" checked>
+                            <label for="modeTimeTravel" class="toggle-label flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-hourglass-split" viewBox="0 0 16 16"><path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2h-7zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48V8.35zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/></svg>
+                                Time Travel (Story)
+                            </label>
+                            <input type="radio" id="modeInfoUpdate" name="contentMode" value="info" class="toggle-radio">
+                            <label for="modeInfoUpdate" class="toggle-label flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                Info Update / News
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4">
+                            <!-- NEW: Target Audience Selector -->
+                            <div>
+                                <label for="targetAudienceSet" class="block mb-1.5 text-xs text-slate-400 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 1 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.847zM8.5 8.5v2.5h2.99a12.495 12.495 0 0 0 .337-2.5H8.5zM14.09 4a9.266 9.266 0 0 0-.64-1.539 6.7 6.7 0 0 0-.597-.933 7.024 7.024 0 0 1 1.835 2.472h-1.582zm.85 2.5a6.967 6.967 0 0 1 .466 2.5h-2.49a11.94 11.94 0 0 0-.312-2.5h2.338zm.466 3.5a6.967 6.967 0 0 1-.466 2.5h-2.338a11.935 11.935 0 0 0 .312-2.5h2.49zM11.709 11.5a9.276 9.276 0 0 0 .64 1.539 6.688 6.688 0 0 0 .597.933 7.025 7.025 0 0 1-1.835-2.472h1.582zm-1.886 1.423a8.88 8.88 0 0 1-1.323 1.855A7.97 7.97 0 0 1 8.5 14.923V11.5H7.5v3.423a7.97 7.97 0 0 1-3.645-1.077 8.88 8.88 0 0 1-1.323-1.855A9.269 9.269 0 0 0 5.145 11.5h5.71z"/></svg>
+                                    Target Audience / Market:
+                                </label>
+                                <select id="targetAudienceSet" class="w-full input-field rounded-lg p-3 text-sm font-bold bg-slate-900 border-purple-500/50 text-purple-300">
+                                    <option value="local">🇮🇩 Indonesia (Lokal)</option>
+                                    <option value="global">🌎 Global (US/UK - Viral)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="projectTitleInput" class="block mb-1.5 text-xs text-slate-400">Video Topic / Headline:</label>
+                                <input id="projectTitleInput" type="text" placeholder="e.g., Sejarah Candi Borobudur, AI Revolution 2025..." class="w-full input-field rounded-lg p-3 text-sm font-medium shadow-inner">
+                            </div>
+                            <div class="flex flex-wrap md:flex-nowrap items-end justify-between gap-4">
+                                <button id="generateScriptBtn" class="btn btn-ai font-bold py-2.5 px-6 rounded-lg text-sm whitespace-nowrap flex items-center justify-center gap-2 transition-all hover:scale-[1.02] flex-grow">
+                                    <span id="generateScriptBtnText">Generate Script</span>
+                                    <div id="scriptLoader" class="inline-loader light hidden" style="width: 16px; height: 16px; border-width: 2px;"></div>
+                                </button>
+                                
+                                <div class="text-slate-600 text-[10px] font-bold self-center font-mono">OR</div>
+
+                                <!-- VIDEO UPLOAD BUTTON -->
+                                <input type="file" id="videoInput" accept="video/*" class="hidden">
+                                <button id="videoToScriptBtn" class="btn btn-video-import font-bold py-2.5 px-6 rounded-lg text-sm whitespace-nowrap flex items-center justify-center gap-2 transition-all hover:scale-[1.02] flex-grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.461a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/></svg>
+                                    <span id="videoToScriptBtnText">Extract from Video</span>
+                                    <div id="videoLoader" class="inline-loader light hidden" style="width: 16px; height: 16px; border-width: 2px;"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative flex-grow flex flex-col">
+                        <label for="scenarioInput" class="block mb-2">Generated Script:</label>
+                        <textarea id="scenarioInput" class="w-full flex-grow input-field rounded-lg p-4 min-h-[250px] font-mono text-sm leading-relaxed" placeholder="AI Script will appear here..."></textarea>
+                    </div>
+
+                     <div class="flex items-center justify-between bg-slate-800 p-3 rounded-lg border border-slate-700">
+                        <div class="flex items-center gap-3">
+                             <label for="sceneCount" class="text-xs">Scenes:</label>
+                             <input type="number" id="sceneCount" min="1" max="20" value="5" class="w-16 input-field rounded-lg p-1.5 text-center text-sm font-bold">
+                        </div>
+                        <button id="analyzeTextBtn" class="btn btn-secondary font-semibold py-1.5 px-4 rounded-lg text-xs whitespace-nowrap hover:bg-slate-600">Auto-Analyze</button>
+                     </div>
+
+                     <!-- NEW: CTA Checkbox -->
+                     <div class="mt-2 flex items-center justify-center gap-2 p-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                        <input type="checkbox" id="ctaCheckbox" class="w-4 h-4 text-cyan-600 rounded focus:ring-cyan-500 border-slate-500 bg-slate-800" checked>
+                        <label for="ctaCheckbox" class="text-xs md:text-sm font-bold text-cyan-400 cursor-pointer select-none">
+                            Auto-Insert "Link in Bio" CTA Scene
+                        </label>
+                     </div>
+
+                    <div class="pt-4 text-center">
+                        <button id="generateBtn" class="btn btn-primary font-extrabold py-4 px-12 text-lg rounded-xl w-full disabled:opacity-50 disabled:cursor-not-allowed tracking-widest uppercase hover:shadow-cyan-500/20 transition-all" disabled>
+                            🎬 Generate Visual Assets
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VIEW 2: STORYBOARD -->
+                <div id="storyboardView" class="p-6 hidden z-10">
+                    <div id="loader" class="mx-auto loader hidden"></div>
+                    <div id="storyboardOutput" class="space-y-8">
+                        <div id="results-placeholder" class="flex flex-col items-center justify-center h-full text-center text-slate-500 py-24">
+                            <div class="bg-slate-800 p-6 rounded-full mb-6 border border-slate-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-film text-slate-600" viewBox="0 0 16 16"><path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"/></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-400 mb-2 font-mono">AWAITING DATA...</h3>
+                            <p class="max-w-md mx-auto text-xs text-slate-500 uppercase tracking-widest">Please generate script first.</p>
+                        </div>
+                    </div>
+                    <div id="seoMetadataSection" class="hidden mt-12 p-6 border-t border-cyan-900 bg-slate-900/50 rounded-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-cyan-400 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/></svg>
+                                Distribution Metadata
+                            </h3>
+                            <button id="downloadSeoBtn" class="btn btn-secondary text-xs font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                                Download Assets (.txt)
+                            </button>
+                        </div>
+                        <div id="seoLoader" class="mx-auto loader hidden"></div>
+                        <div id="seoContent" class="space-y-6 text-sm text-slate-300"></div>
+                    </div>
+                </div>
+                
+            </main>
+        </div>
+    </div>
+    
+    <!-- Character Modal -->
+    <div id="characterModal" class="custom-modal-overlay">
+        <div class="custom-modal-content border-purple-500/30 shadow-purple-900/20">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+                <h2 id="characterModalTitle" class="text-xl font-bold text-purple-400 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 16 16"><path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></svg>
+                    Casting Protocol
+                </h2>
+                <button id="closeCharModalBtn" class="text-slate-400 hover:text-white transition-colors text-2xl">&times;</button>
+            </div>
+
+            <div id="char-step1" class="flex-grow">
+                 <p class="text-center text-slate-400 mb-6 text-xs font-mono uppercase">Upload reference image or describe features.</p>
+                 <input type="file" id="charImageInput" class="hidden" accept="image/*">
+                 <div id="charImagePreview" class="w-full p-6 rounded-xl bg-slate-900 border-2 border-dashed border-slate-700 mb-6 flex flex-col items-center justify-center text-slate-500 min-h-[180px] cursor-pointer hover:border-purple-500 hover:bg-purple-900/10 transition-all">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cloud-upload mb-2" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.633 14.497 11 12.636 11H10a.5.5 0 0 1 0-1h2.636c1.219 0 2.24-1.098 2.24-2.723 0-1.564-.918-2.974-2.36-3.094a.5.5 0 0 1-.44-.496 6.004 6.004 0 0 0-1.78-3.715 5.48 5.48 0 0 0-8.374 1.628.5.5 0 0 1-.496.383C2.474 3.81 1 5.15 1 7.318 1 9.25 2.77 10.665 4.628 10.665H6a.5.5 0 0 1 0 1H4.628C2.287 11.666 0 9.765 0 7.318 0 4.905 2.083 2.781 4.406 1.342z"/><path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/></svg>
+                     <span class="text-xs font-bold">UPLOAD BIO-METRIC DATA (PHOTO)</span>
+                 </div>
+                 <button id="uploadImageBtn" class="hidden">Trigger Upload</button>
+                <textarea id="charIdeaInput" placeholder="e.g., Male 40s, sharp features, cyberpunk glasses, futuristic jacket..." class="w-full input-field rounded-lg p-3 text-sm min-h-[80px]" rows="3"></textarea>
+                <button id="developCharBtn" class="btn btn-ai font-bold py-3 px-6 rounded-lg w-full mt-6 flex items-center justify-center gap-2 shadow-lg">
+                    <span id="developCharBtnText">✨ Generate Profile</span>
+                    <div id="charLoader" class="inline-loader light hidden"></div>
+                </button>
+            </div>
+            
+            <div id="char-step2" class="hidden flex-grow overflow-y-auto pr-2 space-y-5 custom-scrollbar">
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block mb-1 text-xs text-purple-500">Name</label><input type="text" id="charBrandName" class="w-full input-field rounded-lg p-2.5 text-sm font-bold"></div>
+                    <div><label class="block mb-1 text-xs text-purple-500">Role</label><input type="text" id="charModelName" class="w-full input-field rounded-lg p-2.5 text-sm"></div>
+                </div>
+                
+                <!-- PHYSICAL DESCRIPTION SECTION -->
+                <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700">
+                    <label class="block mb-1 text-xs text-purple-500 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+                        Physical Traits
+                    </label>
+                    <textarea id="charDesignLanguage" class="w-full input-field rounded-lg p-2.5 text-sm h-20 text-xs" placeholder="Face, hair, skin details..."></textarea>
+                </div>
+
+                <!-- WARDROBE SECTION -->
+                <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700">
+                    <label class="block mb-1 text-xs text-purple-500 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16"><path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"/></svg>
+                        Wardrobe Presets
+                    </label>
+                    
+                    <!-- Wardrobe Preset Pills -->
+                    <div id="wardrobePresets" class="flex flex-wrap gap-2 mb-3"></div>
+                    
+                    <textarea id="charOutfitDesc" class="w-full input-field rounded-lg p-2.5 text-sm h-20 text-xs" placeholder="Outfit details..."></textarea>
+                </div>
+            </div>
+
+            <div id="char-step3" class="hidden flex-grow overflow-y-auto pr-2 custom-scrollbar">
+                <p class="mb-3 font-bold text-sm text-purple-400 uppercase tracking-wide font-mono">Action DNA</p>
+                <div id="actionDnaSuggestions" class="flex flex-wrap gap-2 mb-5"></div>
+                <div class="flex gap-2 mb-4"><input type="text" id="customActionDnaInput" class="w-full input-field rounded-lg p-2.5 text-sm" placeholder="Add specific action..."><button id="addCustomDnaBtn" class="btn btn-secondary px-4 rounded-lg font-bold">+</button></div>
+                <div id="selectedActionDna" class="flex flex-wrap gap-2 p-3 bg-slate-900/50 rounded-lg border border-slate-700 min-h-[60px]"></div>
+            </div>
+            
+            <div class="flex-shrink-0 pt-6 mt-6 border-t border-slate-800 flex justify-end gap-3">
+                 <button id="charPrevBtn" class="btn btn-secondary px-5 rounded-lg hidden">BACK</button>
+                 <button id="charNextBtn" class="btn btn-primary px-5 rounded-lg hidden font-bold">NEXT</button>
+                 <button id="addCharBtn" class="btn btn-success px-6 rounded-lg hidden font-bold shadow-lg shadow-green-900/20">SAVE DATA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings, Notification, Confirmation Modals -->
+    <div id="settingsModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <h2 class="text-xl font-bold mb-4 text-cyan-400">System Config</h2>
+            <input type="password" id="apiKeyInput" placeholder="Google AI API Key (Opsional / Otomatis)" class="w-full input-field rounded-lg p-3 mb-4">
+            <div class="flex justify-end gap-2">
+                <button id="closeSettingsModalBtn" class="btn btn-secondary px-4 rounded-lg">Close</button>
+                <button id="saveApiKeyBtn" class="btn btn-primary px-4 rounded-lg">Save Config</button>
+            </div>
+        </div>
+    </div>
+    <div id="notificationModal" class="fixed bottom-5 right-5 bg-slate-900 text-white py-4 px-6 rounded-lg shadow-2xl hidden fade-in z-50 border-l-4 border-cyan-500 flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle-fill text-cyan-500" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+        <p id="notificationText" class="font-medium font-mono text-xs"></p>
+    </div>
+    <div id="confirmationModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <h3 id="confirmationTitle" class="font-bold text-lg mb-2 text-white font-mono">CONFIRM ACTION</h3>
+            <p id="confirmationMessage" class="mb-6 text-slate-400"></p>
+            <div class="flex justify-end gap-2"><button id="confirmCancelBtn" class="btn btn-secondary px-4 rounded-lg">Cancel</button><button id="confirmOkBtn" class="btn btn-primary px-4 rounded-lg">Confirm</button></div>
+        </div>
+    </div>
+    <input type="file" id="importFileInput" class="hidden" accept=".json">
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- AUTHENTICATION LOGIC ---
+        const appPasswordInput = document.getElementById('appPasswordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const appWrapper = document.getElementById('app-wrapper');
+        const loginError = document.getElementById('loginError');
+
+        const checkPassword = () => {
+            // UPDATED PASSWORD CHECK
+            if(appPasswordInput.value === 'studiokreator.v1') {
+                loginModal.classList.add('hidden');
+                appWrapper.classList.remove('hidden');
+                appWrapper.classList.add('fade-in');
+            } else {
+                loginError.classList.remove('hidden');
+                appPasswordInput.classList.add('border-red-500', 'text-red-500');
+                setTimeout(() => {
+                    appPasswordInput.classList.remove('border-red-500', 'text-red-500');
+                }, 2000);
+            }
+        };
+
+        loginBtn.addEventListener('click', checkPassword);
+        appPasswordInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') checkPassword(); });
+
+        // --- STATE & DATA ---
+        let characters = []; let storyboardData = []; let userApiKey = '';
+        let currentCharacterModalStep = 1; let isEditingCharacter = false; let editingCharacterIndex = -1;
+        let uploadedImageBase64 = null; let uploadedImageType = null;
+
+        // NEW: Visual Style Dictionary
+        const visualStyles = {
+            'realistic': { name: "Hyper Realistic", prompt: "8k, photorealistic, cinematic lighting, high detail, octane render" },
+            'motion_clay': { name: "Motion Clay", prompt: "motion clay style, claymation, plasticine texture, stop motion look, handmade feel, soft edges" },
+            '3d_pixar': { name: "3D Pixar", prompt: "3D render, Disney Pixar style, cute features, vibrant colors, soft lighting, 3d cartoon, highly detailed" },
+            'anime': { name: "Anime Style", prompt: "anime style, makoto shinkai style, vibrant background, 2D animation, clean lines" },
+            'low_poly': { name: "Low Poly", prompt: "low poly 3d style, playstation 1 graphics, retro gaming aesthetics, blocky, flat shading" },
+            'retro_vhs': { name: "Retro VHS", prompt: "1990s home video style, VHS glitch, low resolution, grainy, vintage aesthetic, camcorder footage" }
+        };
+
+        const templateCharacters = [
+             { 
+                 name: "Pak Didik (Guru)", 
+                 brandName: "Pak Didik", 
+                 modelName: "Guru", 
+                 description: "Indonesian male, age 40, mature face, thin black hair, glasses, warm expression.",
+                 outfits: { "Dinas": "wearing teacher uniform", "Jas": "wearing formal suit", "Batik": "wearing Batik shirt" },
+                 currentOutfit: "wearing Batik shirt",
+                 actionDNA: ["Menunjuk Peta", "Berbicara Serius"]
+             },
+             { 
+                 name: "Adi (Petualang)", 
+                 brandName: "Adi", 
+                 modelName: "Penjelajah", 
+                 description: "12-year-old Indonesian boy, messy hair, adventurous look, dirt on face.",
+                 outfits: { "Petualang": "wearing explorer jacket", "Kaos": "wearing t-shirt" },
+                 currentOutfit: "wearing explorer jacket",
+                 actionDNA: ["Terkejut", "Berlari"]
+             },
+             { 
+                 name: "Dewi (Presenter)", 
+                 brandName: "Dewi", 
+                 modelName: "Host News", 
+                 description: "Professional Indonesian woman, age 25, clean makeup, straight hair, sharp look.",
+                 outfits: { "Blazer": "wearing news anchor blazer", "Kasual": "wearing blouse" },
+                 currentOutfit: "wearing news anchor blazer",
+                 actionDNA: ["Membaca Berita", "Senyum Profesional"]
+             }
+        ];
+
+        const defaultState = { 
+            projectTitle: '', scenario: '', sceneCount: 5, 
+            locationSet: 'custom_location', customLocation: '', 
+            timeSetting: '', 
+            cameraStyleSet: 'standard_cinematic', videoOrientation: 'vertical_9_16', narratorVoiceSet: 'pria_dewasa_berwibawa',
+            visualStyleSet: 'realistic', contentMode: 'story', targetAudience: 'local'
+        };
+        let state = { ...defaultState };
+
+        // --- DOM ELEMENTS ---
+        const els = {
+            projectTitleInput: document.getElementById('projectTitleInput'),
+            timeSettingInput: document.getElementById('timeSettingInput'), 
+            locationSetInput: document.getElementById('locationSet'),
+            customLocationInput: document.getElementById('customLocationInput'),
+            visualStyleSetInput: document.getElementById('visualStyleSet'),
+            narratorVoiceSetInput: document.getElementById('narratorVoiceSet'), 
+            targetAudienceSetInput: document.getElementById('targetAudienceSet'), // NEW
+            contentModeInputs: document.getElementsByName('contentMode'),
+            generateScriptBtn: document.getElementById('generateScriptBtn'),
+            scenarioInput: document.getElementById('scenarioInput'),
+            sceneCountInput: document.getElementById('sceneCount'),
+            generateBtn: document.getElementById('generateBtn'),
+            analyzeTextBtn: document.getElementById('analyzeTextBtn'), 
+            charListContainer: document.getElementById('charListContainer'),
+            templateCharList: document.getElementById('templateCharList'),
+            storyboardOutput: document.getElementById('storyboardOutput'),
+            loader: document.getElementById('loader'),
+            resultsPlaceholder: document.getElementById('results-placeholder'),
+            notifModal: document.getElementById('notificationModal'),
+            notifText: document.getElementById('notificationText'),
+            downloadSeoBtn: document.getElementById('downloadSeoBtn'),
+            seoContent: document.getElementById('seoContent'),
+            seoLoader: document.getElementById('seoLoader'),
+            seoMetadataSection: document.getElementById('seoMetadataSection'),
+            wardrobePresets: document.getElementById('wardrobePresets'),
+            charOutfitDesc: document.getElementById('charOutfitDesc'),
+            charDesignLanguage: document.getElementById('charDesignLanguage'),
+            // Video Elements
+            videoInput: document.getElementById('videoInput'),
+            videoToScriptBtn: document.getElementById('videoToScriptBtn'),
+            videoLoader: document.getElementById('videoLoader'),
+            videoToScriptBtnText: document.getElementById('videoToScriptBtnText')
+        };
+
+        // --- API HELPER ---
+        const callGeminiAPI = async (prompt, schema = null, model = 'gemini-2.5-flash-preview-09-2025', inputBase64 = null, inputType = null) => {
+            const apiKey = localStorage.getItem('didikIdApiKey') || ""; 
+            
+            if (!apiKey) {
+                showNotification("API Key belum diset! Buka Settings (ikon gerigi).");
+                throw new Error("API Key Missing");
+            }
+            
+            let url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+            let parts = [{ text: prompt }];
+            // Generic Inline Data (works for Image and Video in Flash models)
+            if (inputBase64 && inputType) parts.unshift({ inlineData: { mimeType: inputType, data: inputBase64 } });
+            
+            let payload = { contents: [{ role: "user", parts: parts }] };
+            if (schema) payload.generationConfig = { responseMimeType: "application/json", responseSchema: schema };
+
+            for(let i=0; i<3; i++) {
+                try {
+                    const res = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+                    if(!res.ok) { if(res.status===429) { await new Promise(r=>setTimeout(r, 2000)); continue; } throw new Error((await res.json()).error?.message || "API Error"); }
+                    const data = await res.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                } catch(e) { if(i===2) throw e; }
+            }
+        };
+
+        // --- UI FUNCTIONS ---
+        const showNotification = (msg) => { els.notifText.textContent = msg; els.notifModal.classList.remove('hidden'); setTimeout(()=>els.notifModal.classList.add('hidden'), 3000); };
+        
+        const updateUIState = () => { els.generateBtn.disabled = !(state.scenario.trim()); };
+
+        window.copyText = (btn) => {
+            const text = btn.previousElementSibling.innerText;
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try { 
+                document.execCommand('copy'); 
+                showNotification("Teks disalin ke clipboard! 📋");
+            } catch (err) { 
+                console.error('Failed to copy', err); 
+                showNotification("Gagal menyalin teks.");
+            }
+            document.body.removeChild(textArea);
+        };
+
+        const renderCharacters = () => {
+            els.charListContainer.innerHTML = characters.length ? '' : '<p class="text-xs text-slate-500 italic text-center py-4 border border-dashed border-slate-700 rounded font-mono">NO ACTORS SELECTED.</p>';
+            characters.forEach((c, i) => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-800 p-3 rounded-lg border border-slate-700 flex justify-between items-center group hover:border-purple-500/50 transition-all';
+                const outfitShort = c.currentOutfit ? c.currentOutfit.split(',')[0].substring(0, 20) + "..." : "Default";
+                div.innerHTML = `
+                <div class="flex-grow">
+                    <p class="font-bold text-sm text-white group-hover:text-purple-400 transition-colors">${c.name}</p>
+                    <div class="flex gap-2 text-[10px] text-slate-400 font-mono">
+                        <span>${c.modelName}</span>
+                        <span class="text-slate-600">|</span>
+                        <span class="text-purple-500/80 italic">${outfitShort}</span>
+                    </div>
+                </div>
+                <button class="text-slate-500 hover:text-red-400 transition-colors p-1" onclick="removeChar(${i})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/></svg></button>`;
+                els.charListContainer.appendChild(div);
+            });
+        };
+        window.removeChar = (i) => { characters.splice(i, 1); renderCharacters(); };
+
+        const renderTemplates = () => {
+            els.templateCharList.innerHTML = '';
+            templateCharacters.forEach((t) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left text-xs p-2.5 bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:border-purple-500/50 rounded mb-2 flex justify-between items-center text-slate-300 transition-all';
+                btn.innerHTML = `<span>${t.name}</span> <span class="text-purple-500 font-bold bg-purple-500/10 px-1.5 py-0.5 rounded text-[9px] font-mono">LOAD</span>`;
+                btn.onclick = () => openCharModalWithTemplate(JSON.parse(JSON.stringify(t)));
+                els.templateCharList.appendChild(btn);
+            });
+        };
+        
+        const openCharModalWithTemplate = (charData) => {
+            switchCharStep(2);
+            document.getElementById('characterModal').classList.add('visible');
+            document.getElementById('charBrandName').value = charData.brandName;
+            document.getElementById('charModelName').value = charData.modelName;
+            document.getElementById('charDesignLanguage').value = charData.description;
+            renderWardrobePills(charData.outfits, charData.currentOutfit);
+        };
+        
+        const renderWardrobePills = (outfitsObj, selectedVal) => {
+            els.wardrobePresets.innerHTML = '';
+            if(!outfitsObj) return;
+            Object.entries(outfitsObj).forEach(([key, desc]) => {
+                const pill = document.createElement('span');
+                pill.className = `wardrobe-pill ${desc === selectedVal ? 'active' : ''}`;
+                pill.textContent = key;
+                pill.onclick = () => {
+                    document.querySelectorAll('.wardrobe-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    els.charOutfitDesc.value = desc;
+                };
+                els.wardrobePresets.appendChild(pill);
+            });
+            els.charOutfitDesc.value = selectedVal || "";
+        };
+
+        // --- LOGIC UTAMA ---
+        const handleGenerateSeoMetadata = async () => {
+            els.seoMetadataSection.classList.remove('hidden');
+            els.seoLoader.classList.remove('hidden');
+            els.seoContent.innerHTML = '';
+            els.downloadSeoBtn.classList.add('hidden');
+
+            // PERBAIKAN: Gunakan Naskah Asli (state.scenario) sebagai sumber utama
+            const contentSource = state.scenario ? state.scenario : storyboardData.map(s => s.scene_summary).join(" ");
+            const topicContext = state.projectTitle ? state.projectTitle : "Deteksi Otomatis dari Naskah";
+            
+            // NEW: Ambil Gaya Visual yang sedang aktif
+            const styleKey = state.visualStyleSet;
+            const styleData = visualStyles[styleKey] || visualStyles['realistic'];
+
+            let prompt;
+
+            // --- TARGET AUDIENCE LOGIC FOR SEO ---
+            if (state.targetAudience === 'global') {
+                prompt = `Act as a Viral YouTube Strategist (US/UK Market).
+Task: Create high-CTR metadata in ENGLISH for a short vertical video.
+
+**Context:** "${topicContext}"
+**Visual Style:** "${styleData.prompt}"
+
+**Original Script:**
+\`\`\`
+${contentSource.substring(0, 3000)}
+\`\`\`
+
+**Instructions for GLOBAL VIRALITY:**
+1. **Title:** Use "Curiosity Gap" or "Negativity Bias" (e.g., "Stop doing this", "I found a glich", "Why X is lying"). MUST BE ENGLISH.
+2. **Description:** Hook the reader in the first line.
+3. **Hashtags:** Use broad, viral English tags (#fyp #viral #mindblown).
+4. **Thumbnail Prompt:** Describe a high-contrast, emotional face close-up or a "mystery object". Use the visual style: "${styleData.prompt}".
+
+Output JSON: { "youtube_title": "...", "youtube_description": "...", "youtube_tags": "...", "thumbnail_prompt": "..." }`;
+            } else {
+                // LOCAL INDONESIA LOGIC
+                 prompt = `Bertindaklah sebagai Pakar SEO YouTube & Content Strategist Indonesia.
+Tugas: Buat metadata YouTube Shorts/Reels yang SANGAT RELEVAN dengan NASKAH ASLI.
+
+**Topik/Konteks:** "${topicContext}"
+**Jenis Konten:** "${state.contentMode === 'story' ? 'Cerita Time Travel' : 'Info/Berita Edukasi'}"
+**Gaya Visual Video:** "${styleData.prompt}" (Gunakan gaya ini untuk konsistensi Thumbnail)
+
+**NASKAH ASLI:**
+\`\`\`
+${contentSource.substring(0, 3000)} 
+\`\`\`
+
+Instruksi:
+1. **Analisa Naskah:** Metadata HARUS mencerminkan isi naskah/video secara spesifik.
+2. **Judul:** Clickbait positif, sertakan emosikon. Bahasa Indonesia.
+3. **Deskripsi:** Ringkasan menarik dari naskah tersebut.
+4. **Hashtags:** 10-15 viral hashtags yang relevan, dipisahkan koma.
+5. **Thumbnail Prompt (PENTING):**
+   - Tulis deskripsi visual dalam **BAHASA INGGRIS (English)** agar hasil maksimal di AI Image Generator.
+   - **WAJIB** memasukkan gaya visual: "${styleData.prompt}".
+   - Gambarkan ekspresi wajah karakter utama yang menarik/emosional.
+   - Jika ingin menampilkan teks judul di dalam gambar, tuliskan: Text overlay saying "JUDUL SINGKAT" in bold font.
+
+Output JSON: { "youtube_title": "...", "youtube_description": "...", "youtube_tags": "...", "thumbnail_prompt": "..." }`;
+            }
+
+            try {
+                const resultText = await callGeminiAPI(prompt, { type: "OBJECT", properties: { youtube_title: { type: "STRING" }, youtube_description: { type: "STRING" }, youtube_tags: { type: "STRING" }, thumbnail_prompt: { type: "STRING" } } });
+                const parsedResult = JSON.parse(resultText);
+                
+                // Render Logic
+                els.seoContent.innerHTML = '';
+                els.downloadSeoBtn.classList.remove('hidden');
+                
+                const addSec = (t, c, i) => els.seoContent.innerHTML += `<div class="mb-4 bg-slate-900/50 p-3 rounded border border-slate-600"><h4 class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">${t}</h4><p id="${i}" class="text-slate-300 text-xs md:text-sm whitespace-pre-wrap font-mono">${c}</p></div>`;
+                
+                addSec('Video Title', parsedResult.youtube_title, 'yt-title');
+                addSec('Description', parsedResult.youtube_description, 'yt-desc');
+                addSec('Tags', parsedResult.youtube_tags, 'yt-tags');
+                // Bagian Thumbnail Prompt sekarang akan dalam Bahasa Inggris + Style
+                addSec('Thumbnail Prompt (AI)', parsedResult.thumbnail_prompt, 'yt-thumb');
+            } catch (error) { els.seoContent.innerHTML = `<p class="text-red-500">Gagal SEO: ${error.message}</p>`; } finally { els.seoLoader.classList.add('hidden'); }
+        };
+
+        // NEW: Download SEO Assets Logic
+        els.downloadSeoBtn.addEventListener('click', () => {
+            try {
+                const title = document.getElementById('yt-title').innerText;
+                const desc = document.getElementById('yt-desc').innerText;
+                const tags = document.getElementById('yt-tags').innerText; // Get tags
+                const thumb = document.getElementById('yt-thumb').innerText;
+                
+                const content = `--- KREATORSTUDIO.AI PROJECT ASSETS ---\n\n[JUDUL VIDEO]\n${title}\n\n[DESKRIPSI]\n${desc}\n\n[TAGS / HASHTAGS]\n${tags}\n\n[PROMPT THUMBNAIL]\n${thumb}\n\n-----------------------------`;
+                
+                // Sanitize filename from project title
+                const safeFilename = state.projectTitle
+                    .replace(/[^a-z0-9]/gi, '_') // Replace non-alphanumeric with underscore
+                    .replace(/_+/g, '_')         // Remove duplicate underscores
+                    .substring(0, 50);           // Limit length
+                
+                const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, `${safeFilename || 'Project_Assets'}.txt`);
+                showNotification("File assets berhasil diunduh! 📥");
+            } catch (e) {
+                console.error(e);
+                showNotification("Gagal mengunduh asset. Pastikan SEO sudah digenerate.");
+            }
+        });
+
+        const handleGenerateScript = async () => {
+            const topic = els.projectTitleInput.value.trim();
+            const sceneCount = els.sceneCountInput.value;
+            const time = els.timeSettingInput.value.trim() || "Umum"; 
+            let place = els.locationSetInput.value;
+            if (place === 'custom_location') place = els.customLocationInput.value.trim() || "Studio";
+            
+            if (!topic) return showNotification("Masukkan topik video terlebih dahulu.");
+
+            const btn = els.generateScriptBtn;
+            const loader = document.getElementById('scriptLoader');
+            btn.disabled = true; loader.classList.remove('hidden'); 
+
+            const mainChar = characters.length > 0 ? characters[0].name : "Host";
+            const mode = state.contentMode;
+
+            // Include Voice Style in prompt
+            const voiceStyle = state.narratorVoiceSet.replace(/_/g, ' ');
+            let prompt = "";
+
+            // --- TARGET AUDIENCE LOGIC FOR SCRIPT ---
+            if (state.targetAudience === 'global') {
+                // GLOBAL (US/UK) PROMPT
+                prompt = `Act as a VIRAL TIKTOK SCRIPTWRITER for a Global (US/UK) Audience.
+**Topic:** ${topic} | **Setting:** ${place}
+**Character:** ${mainChar}
+**Segments:** ${sceneCount}
+**Voice Style:** ${voiceStyle} (Interpret the vibe: Authoritative, energetic, or mysterious).
+
+**VIRAL PSYCHOLOGY RULES (Global):**
+1. **LANGUAGE:** English (Native, slang-friendly, punchy).
+2. **THE HOOK (Scene 1):** Must trigger "Curiosity Gap" or "Fear of Missing Out". (e.g., "You've been lying to yourself about X", "Stop scrolling if you want to know...").
+3. **PACING:** Fast. No fluff. Maximum 15 words per scene.
+4. **VISUAL:** ${mainChar} must be visible (Selfie/POV).
+5. **STRUCTURE:** Hook -> Conflict -> Twist -> Conclusion.
+
+${mode === 'story' ? "**Mode:** Time Travel Story / POV Experience." : "**Mode:** Mind-Blowing Facts / Conspiracy / News."}
+
+Output: Just the script lines per scene.`;
+
+            } else {
+                // LOCAL (INDONESIA) PROMPT
+                let promptContext = "";
+                if (mode === 'story') {
+                    promptContext = `**MODE: TIME TRAVELLER STORY**
+                    - ${mainChar} sedang berada di lokasi sejarah/masa depan.
+                    - Gaya: Vlog langsung, terkejut, excited, menunjuk ke objek di belakang.
+                    - Konteks: "Saya tidak percaya saya ada di tahun ${time}..."`;
+                } else {
+                    promptContext = `**MODE: INFO UPDATE / NEWS / EDUKASI**
+                    - ${mainChar} adalah presenter/host yang memberikan informasi terbaru.
+                    - Gaya: Informatif, to-the-point, profesional tapi asik, seperti konten "Tahukah Kamu?".
+                    - Konteks: Menjelaskan fakta, data, atau berita tentang topik tersebut.`;
+                }
+
+                prompt = `Bertindaklah sebagai Content Creator Scriptwriter (TikTok/Reels) Indonesia.
+**Topik:** ${topic} | **Tempat:** ${place}
+**Tokoh Utama:** ${mainChar}
+**Jumlah Segmen:** ${sceneCount}
+**Gaya Suara/Narator:** ${voiceStyle} (Sesuaikan gaya bahasa naskah dengan persona ini)
+
+${promptContext}
+
+**ATURAN KERAS:**
+1. **VISUAL:** ${mainChar} HARUS terlihat di kamera (Selfie/Talking Head).
+2. **DURASI:** Batasi narasi MAKSIMAL 102 karakter per scene (Max 8 detik). Bahasa Indonesia gaul/santai.
+3. **OUTPUT:** Hanya teks naskah per scene.
+
+Tulis naskah sekarang.`;
+            }
+
+            try {
+                const text = await callGeminiAPI(prompt);
+                els.scenarioInput.value = text;
+                state.scenario = text;
+                updateUIState();
+                showNotification(`Naskah ${state.targetAudience === 'global' ? 'Global Viral' : 'Lokal'} siap!`);
+            } catch (e) { showNotification("Gagal: " + e.message); }
+            finally { btn.disabled = false; loader.classList.add('hidden'); }
+        };
+
+        // --- NEW VIDEO HANDLING LOGIC ---
+        els.videoToScriptBtn.addEventListener('click', () => els.videoInput.click());
+        
+        els.videoInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 20 * 1024 * 1024) { // 20MB limit limit warning
+                showNotification("Video terlalu besar! Gunakan file < 20MB untuk demo ini.");
+                return;
+            }
+
+            els.videoToScriptBtn.disabled = true;
+            els.videoLoader.classList.remove('hidden');
+            els.videoToScriptBtnText.textContent = "Menganalisa...";
+
+            const reader = new FileReader();
+            reader.onload = async (ev) => {
+                const base64Video = ev.target.result.split(',')[1];
+                const mimeType = file.type;
+
+                const prompt = `Tonton video ini dengan cermat.
+                Tugas: Transkripsikan narasi/ucapan dari audio video ini menjadi teks verbatim (apa adanya).
+                
+                1. Jika ada musik intro, abaikan. Fokus pada suara manusia.
+                2. Jika tidak ada suara, deskripsikan apa yang terjadi secara visual dalam format narasi cerita.
+                3. Gabungkan menjadi satu paragraf naskah yang mengalir.`;
+
+                try {
+                    showNotification("Mengupload & Menganalisa Video...");
+                    const transcribedText = await callGeminiAPI(prompt, null, 'gemini-2.5-flash-preview-09-2025', base64Video, mimeType);
+                    
+                    if(transcribedText) {
+                        els.scenarioInput.value = transcribedText;
+                        state.scenario = transcribedText;
+                        updateUIState();
+                        showNotification("Transkripsi Selesai! Membuat Storyboard...");
+                        
+                        // AUTO CHAIN: Analyze -> Split Scenes -> Generate Storyboard
+                        const scenes = Math.max(1, Math.ceil(transcribedText.split(/\s+/).length / 25)); // Estimate segments
+                        els.sceneCountInput.value = scenes;
+                        state.sceneCount = scenes;
+                        
+                        await handleGenerateStoryboard();
+                    } else {
+                        showNotification("Gagal mengekstrak audio/video.");
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showNotification("Error Video AI: " + err.message);
+                } finally {
+                    els.videoToScriptBtn.disabled = false;
+                    els.videoLoader.classList.add('hidden');
+                    els.videoToScriptBtnText.textContent = "Ekstrak Naskah dari Video";
+                    els.videoInput.value = ''; // Reset input
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        const handleGenerateStoryboard = async () => {
+            if(!state.scenario) return;
+            els.storyboardOutput.innerHTML = '';
+            els.loader.classList.remove('hidden'); els.resultsPlaceholder.classList.add('hidden');
+            document.getElementById('tabStoryboard').click(); 
+            els.seoMetadataSection.classList.add('hidden');
+
+            state.sceneCount = els.sceneCountInput.value;
+            const mainChar = characters.length > 0 ? characters[0].name : "Host";
+            
+            // Updated Prompt: Force summarizing/condensing for long text instead of splitting
+            const prompt = `Technical Director Task. Convert script to Storyboard JSON.
+**Script:** \`\`\`${state.scenario}\`\`\`
+**Context:** ${state.contentMode} Mode.
+**Visual Style:** ${state.visualStyleSet}
+**Character:** ${mainChar}
+
+**CRITICAL RULE FOR DURATION:** 1. The target platform has a HARD LIMIT of 8 seconds per clip.
+2. **MAXIMUM 102 CHARACTERS PER SCENE NARRATION.**
+3. **IF A SEGMENT IS TOO LONG, YOU MUST REWRITE AND CONDENSE IT TO BE UNDER 102 CHARACTERS.**
+   - Do NOT split the scene. Summarize the text instead.
+   - Keep the original core meaning but use fewer, more efficient words.
+   - ${state.targetAudience === 'global' ? "Use concise, punchy English suitable for Viral Shorts." : "Use concise, punchy Indonesian suitable for TikTok/Reels (Shorts)."}
+
+Output JSON (Array of objects with 'scene_number', 'scene_title', 'scene_summary', 'sound_design.narration_script'). Make exactly ${state.sceneCount} scenes.`;
+
+            try {
+                const res = await callGeminiAPI(prompt, { type: "OBJECT", properties: { storyboard: { type: "ARRAY", items: { type: "OBJECT", properties: { scene_number: {type:"NUMBER"}, scene_title:{type:"STRING"}, scene_summary:{type:"STRING"}, sound_design:{type:"OBJECT", properties:{narration_script:{type:"STRING"}}} } } } } });
+                storyboardData = JSON.parse(res).storyboard;
+                
+                // --- CTA INJECTION LOGIC START ---
+                // Cek apakah checkbox dicentang
+                if (document.getElementById('ctaCheckbox').checked) {
+                    let ctaOptions = [];
+                    let ctaTitle = "";
+
+                    if (state.targetAudience === 'global') {
+                        // English / Global CTAs
+                        ctaOptions = [
+                            "Link in bio. Don't miss it.",
+                            "Full secret in the bio link.",
+                            "Check the link in bio NOW.",
+                            "Want to do this? Link in bio.",
+                            "Bio link. Go. Now.",
+                            "You need to see the link in bio.",
+                            "Grab yours at the link in bio!"
+                        ];
+                        ctaTitle = "CTA (Link in Bio)";
+                    } else {
+                        // Indonesian / Local CTAs
+                        ctaOptions = [
+                            "Mau hasil video seperti ini? Klik link di bio sekarang juga!",
+                            "Ingin belajar cara bikin video sekeren ini? Langsung ke link di bio!",
+                            "Kalau kamu pengin bisa bikin video seperti ini, tekan link di bio!",
+                            "Penasaran gimana cara buatnya? Cek link di bio sekarang!",
+                            "Ayo mulai bikin video profesional! Klik link di bio!",
+                            "Mau coba juga? Semua panduannya ada di link bio!",
+                            "Jangan cuma nonton—buat versi kamu sendiri! Link di bio!",
+                            "Siap level up kontenmu? Klik link di bio!",
+                            "Butuh tutorial lengkapnya? Udah tersedia di link bio, tinggal klik!",
+                            "Mau jadi kreator keren? Awali dengan klik link di bio!"
+                        ];
+                        ctaTitle = "CTA & Closing (Link di Bio)";
+                    }
+                    
+                    const randomCta = ctaOptions[Math.floor(Math.random() * ctaOptions.length)];
+                    const lastSceneNum = storyboardData.length > 0 ? storyboardData[storyboardData.length - 1].scene_number : 0;
+                    
+                    // Push the special CTA scene
+                    storyboardData.push({
+                        scene_number: lastSceneNum + 1,
+                        scene_title: ctaTitle,
+                        scene_summary: "Visual Close-up layar HP menampilkan profil akun, jari menunjuk tombol link di bio.",
+                        sound_design: {
+                            narration_script: randomCta
+                        }
+                    });
+                }
+                // --- CTA INJECTION LOGIC END ---
+
+                renderStoryboardCards();
+                handleGenerateSeoMetadata();
+            } catch (e) { els.storyboardOutput.innerHTML = `<p class="text-red-500 text-center">Error: ${e.message}</p>`; }
+            finally { els.loader.classList.add('hidden'); }
+        };
+
+        const renderStoryboardCards = () => {
+            els.storyboardOutput.innerHTML = '';
+            storyboardData.forEach((s, i) => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-800/80 p-5 rounded-xl border border-slate-700 shadow-lg fade-in relative overflow-hidden backdrop-blur-sm group hover:border-cyan-500/50 transition-all';
+                const narration = s.sound_design?.narration_script || '';
+                
+                div.innerHTML = `
+                <div class="flex gap-5 relative z-10">
+                    <div class="w-12 h-12 bg-cyan-900/20 text-cyan-400 border border-cyan-500/30 font-bold rounded-lg flex items-center justify-center text-xl shrink-0 font-mono shadow-[0_0_10px_rgba(6,182,212,0.2)]">${s.scene_number || i+1}</div>
+                    <div class="w-full">
+                        <h4 class="font-bold text-md text-white mb-1 font-mono tracking-wide">${s.scene_title || 'Scene'}</h4>
+                        <p class="text-xs text-slate-400 mb-3 italic border-l-2 border-slate-600 pl-2">"${s.scene_summary}"</p>
+                        <div class="bg-slate-900/50 p-2 rounded mb-3 border border-slate-700"><textarea id="narration-${i}" class="w-full bg-transparent text-slate-300 text-sm border-none focus:ring-0 p-0 resize-y outline-none font-mono" rows="2">${narration}</textarea></div>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn btn-primary text-[10px] px-3 py-1.5 rounded font-bold" onclick="genPrompt(${i}, 'img')">GEN IMAGE</button>
+                            <button class="btn btn-veo text-[10px] px-3 py-1.5 rounded font-bold" onclick="genPrompt(${i}, 'veo_i2v')">VEO (IMG2VID)</button>
+                            <button class="btn btn-ai text-[10px] px-3 py-1.5 rounded font-bold" onclick="genPrompt(${i}, 'veo_t2v')">VEO (TXT2VID)</button>
+                        </div>
+                        <div id="img-prompt-res-${i}" class="hidden mt-3 text-xs"></div>
+                        <div id="veo_i2v-prompt-res-${i}" class="hidden mt-3 text-xs"></div>
+                        <div id="veo_t2v-prompt-res-${i}" class="hidden mt-3 text-xs"></div>
+                    </div>
+                </div>`;
+                els.storyboardOutput.appendChild(div);
+            });
+        };
+
+        window.genPrompt = async (idx, type) => {
+            const narrationVal = document.getElementById('narration-' + idx).value;
+            const container = document.getElementById(`${type}-prompt-res-${idx}`);
+            container.classList.remove('hidden'); container.innerHTML = '<span class="text-cyan-400 font-mono text-xs animate-pulse">INITIALIZING AI AGENT...</span>';
+            
+            const styleKey = state.visualStyleSet;
+            const styleData = visualStyles[styleKey] || visualStyles['realistic'];
+            const char = characters[0] || { description: "Person", currentOutfit: "Casual" };
+            
+            // NEW: Get Voice Style
+            const voiceStyle = state.narratorVoiceSet.replace(/_/g, ' ');
+
+            // DETEKSI KHUSUS UNTUK CTA
+            let specialVisualInstruction = "";
+            const lowerNarr = narrationVal.toLowerCase();
+            if (lowerNarr.includes("link di bio") || lowerNarr.includes("link bio") || lowerNarr.includes("cek bio") || lowerNarr.includes("link in bio")) {
+                specialVisualInstruction = `
+                **SCENE TYPE: CALL TO ACTION (CTA)**
+                - **SUBJECT:** Close-up of a SMARTPHONE SCREEN held by a hand.
+                - **INTERFACE:** Show a generic social media profile page (resembling Instagram/TikTok UI).
+                - **ACTION:** A finger is explicitly POINTING at or TAPPING a URL link in the bio section.
+                - **FOCUS:** The "Link in Bio" area must be clearly visible and in focus.
+                `;
+            }
+
+            let promptReq = "";
+            const commonInstructions = `
+            **CRITICAL VISUAL DIRECTIVE (DO NOT SHOW THE HOST/NARRATOR UNLESS NECESSARY):**
+            1. **FOCUS ON THE STORY CONTENT:** If the narration describes a place, an object, a historical event, or an action, THE VISUAL MUST DEPICT THAT SCENE directly. 
+               - *Bad Example:* A host talking about a volcano.
+               - *Good Example:* A cinematic drone shot of a volcano erupting with ash clouds.
+            2. **CINEMATIC ANGLES:** Use dynamic angles (Low angle, Drone view, Macro close-up, Over-the-shoulder). Avoid static "news anchor" shots unless specifically an intro.
+            3. **ATMOSPHERE:** The visual mood must match the narration's emotion (e.g., mysterious, energetic, sad).
+            
+            ${specialVisualInstruction}
+
+            **REQUIRED OUTPUT FORMAT:**
+            **Context Narration:** "${narrationVal}"
+
+            [Paragraph 1: Visual Style & Atmosphere]
+            **MANDATORY STYLE ENFORCEMENT:** You MUST start the prompt with these exact keywords to ensure the style is correct: **"${styleData.prompt}"**.
+            Describe the lighting and color palette to match this style.
+
+            [Paragraph 2: Detailed Scene Action]
+            - **SUBJECT:** What is the main focus? (e.g., The Ancient Temple, A Futuristic Car, A explosion).
+            - **ACTION:** What is moving? (e.g., Clouds passing fast, trees swaying, people running in background).
+            - **CAMERA:** Specific camera movement (e.g., "Slow push in on the artifact", "Tracking shot").
+            - **CHARACTER RULE:** Only include the Character (${char.name}) if they are *actively exploring* or *interacting* with the scene. If it's a general fact/b-roll, DO NOT show the character.
+            `;
+
+            if(type === 'img') {
+                promptReq = `Role: Professional Midjourney/Stable Diffusion Prompter.
+                Task: Create a HIGHLY DETAILED, CINEMATIC image prompt based on the narration.
+                
+                **INPUTS:**
+                - **SOURCE NARRATION:** "${narrationVal}"
+                - Context: ${state.locationSet}
+                - Character Reference (Use only if needed): ${char.description}, ${char.currentOutfit}
+                - **VISUAL STYLE:** ${styleData.name} (${styleData.prompt})
+                
+                ${commonInstructions}`;
+            } else {
+                promptReq = `Role: Professional Google Veo/Sora Prompter.
+                Task: Create a HIGHLY DETAILED video generation prompt (8 seconds).
+                
+                **INPUTS:**
+                - **SOURCE NARRATION:** "${narrationVal}"
+                - Context: ${state.locationSet}
+                - Character Reference (Use only if needed): ${char.description}, ${char.currentOutfit}
+                - **VISUAL STYLE:** ${styleData.name} (${styleData.prompt})
+                
+                ${commonInstructions}
+                - **VIDEO SPECIFIC:** Describe the motion flow. Make it look like a high-budget documentary or movie scene.`;
+            }
+
+            try {
+                const res = await callGeminiAPI(promptReq);
+                container.innerHTML = `
+                <div class="relative group">
+                    <pre class="prompt-output p-3 pr-10 rounded bg-slate-900 border border-slate-600 whitespace-pre-wrap text-xs text-slate-300 shadow-inner">${res}</pre>
+                    <button class="absolute top-2 right-2 btn btn-secondary p-1.5 rounded-md opacity-60 hover:opacity-100 transition-all hover:scale-105 hover:bg-cyan-500 hover:text-white hover:border-cyan-500" onclick="copyText(this)" title="Copy Prompt">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                          <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                    </button>
+                </div>`;
+            } catch(e) { container.innerHTML = "Error"; }
+        };
+        
+        // --- CHARACTER MODAL LOGIC ---
+        const switchCharStep = (step) => {
+            currentCharacterModalStep = step;
+            ['char-step1', 'char-step2', 'char-step3'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['charPrevBtn', 'charNextBtn', 'addCharBtn', 'developCharBtn'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            if (step === 1) { document.getElementById('char-step1').classList.remove('hidden'); document.getElementById('developCharBtn').classList.remove('hidden'); }
+            else if (step === 2) { document.getElementById('char-step2').classList.remove('hidden'); document.getElementById('charPrevBtn').classList.remove('hidden'); document.getElementById('charNextBtn').classList.remove('hidden'); }
+            else { document.getElementById('char-step3').classList.remove('hidden'); document.getElementById('charPrevBtn').classList.remove('hidden'); document.getElementById('addCharBtn').classList.remove('hidden'); }
+        };
+        
+        document.getElementById('developCharBtn').onclick = async () => {
+            const idea = document.getElementById('charIdeaInput').value;
+            const styleKey = state.visualStyleSet;
+            const stylePrompt = visualStyles[styleKey].prompt;
+
+            if(!idea && !uploadedImageBase64) return showNotification("Please enter description or upload image!");
+            document.getElementById('charLoader').classList.remove('hidden');
+            
+            const prompt = `Create character sheet.
+            Style: ${stylePrompt} (IMPORTANT: Description must match this style).
+            Input: "${idea}".
+            Output JSON: brand_name, model_name, physical_features, clothing_style.`;
+            
+            try {
+                const res = await callGeminiAPI(prompt, { type: "OBJECT", properties: {brand_name:{type:"STRING"}, model_name:{type:"STRING"}, physical_features:{type:"STRING"}, clothing_style:{type:"STRING"}} }, 'gemini-2.5-flash-preview-09-2025', uploadedImageBase64, uploadedImageType);
+                const data = JSON.parse(res);
+                document.getElementById('charBrandName').value = data.brand_name;
+                document.getElementById('charModelName').value = data.model_name;
+                document.getElementById('charDesignLanguage').value = data.physical_features;
+                renderWardrobePills({"Auto": data.clothing_style}, data.clothing_style);
+                switchCharStep(2);
+            } catch(e) { showNotification("Failed: " + e.message); }
+            finally { document.getElementById('charLoader').classList.add('hidden'); }
+        };
+        
+        document.getElementById('addCharBtn').onclick = () => {
+            characters.push({
+                name: document.getElementById('charBrandName').value,
+                modelName: document.getElementById('charModelName').value,
+                description: document.getElementById('charDesignLanguage').value,
+                currentOutfit: document.getElementById('charOutfitDesc').value
+            });
+            renderCharacters(); document.getElementById('characterModal').classList.remove('visible');
+        };
+
+        // --- LISTENERS ---
+        els.locationSetInput.addEventListener('change', (e) => { state.locationSet = e.target.value; els.customLocationInput.classList.toggle('hidden', e.target.value !== 'custom_location'); });
+        els.visualStyleSetInput.addEventListener('change', (e) => state.visualStyleSet = e.target.value);
+        els.narratorVoiceSetInput.addEventListener('change', (e) => state.narratorVoiceSet = e.target.value); 
+        els.targetAudienceSetInput.addEventListener('change', (e) => state.targetAudience = e.target.value); // NEW LISTENER
+        els.contentModeInputs.forEach(r => r.addEventListener('change', (e) => state.contentMode = e.target.value));
+        els.timeSettingInput.addEventListener('input', (e) => state.timeSetting = e.target.value); 
+        els.projectTitleInput.addEventListener('input', (e) => state.projectTitle = e.target.value);
+        els.scenarioInput.addEventListener('input', (e) => { state.scenario = e.target.value; updateUIState(); });
+        els.sceneCountInput.addEventListener('change', (e) => state.sceneCount = e.target.value);
+        
+        els.generateScriptBtn.addEventListener('click', handleGenerateScript);
+        els.analyzeTextBtn.addEventListener('click', () => els.sceneCountInput.value = Math.max(1, Math.ceil(els.scenarioInput.value.split(/\s+/).length / 30)));
+        els.generateBtn.addEventListener('click', handleGenerateStoryboard);
+        
+        document.getElementById('charImagePreview').onclick = () => document.getElementById('charImageInput').click();
+        document.getElementById('charImageInput').onchange = (e) => {
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                document.getElementById('charImagePreview').innerHTML = `<img src="${ev.target.result}" class="h-48 object-contain rounded-lg shadow-lg border border-cyan-500/50">`;
+                uploadedImageBase64 = ev.target.result.split(',')[1]; uploadedImageType = file.type;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // Modal & Tabs
+        document.getElementById('openSettingsBtn').onclick = () => document.getElementById('settingsModal').classList.add('visible');
+        document.getElementById('closeSettingsModalBtn').onclick = () => document.getElementById('settingsModal').classList.remove('visible');
+        document.getElementById('saveApiKeyBtn').onclick = () => { localStorage.setItem('didikIdApiKey', document.getElementById('apiKeyInput').value); document.getElementById('settingsModal').classList.remove('visible'); };
+        
+        const tabNaskah = document.getElementById('tabNaskah');
+        const tabStoryboard = document.getElementById('tabStoryboard');
+        tabNaskah.onclick = () => { tabNaskah.classList.add('active'); tabStoryboard.classList.remove('active'); document.getElementById('naskahView').classList.remove('hidden'); document.getElementById('storyboardView').classList.add('hidden'); };
+        tabStoryboard.onclick = () => { tabStoryboard.classList.add('active'); tabNaskah.classList.remove('active'); document.getElementById('storyboardView').classList.remove('hidden'); document.getElementById('naskahView').classList.add('hidden'); };
+        
+        document.getElementById('openAddCharModalBtn').onclick = () => { switchCharStep(1); document.getElementById('characterModal').classList.add('visible'); };
+        document.getElementById('closeCharModalBtn').onclick = () => document.getElementById('characterModal').classList.remove('visible');
+        document.getElementById('charNextBtn').onclick = () => switchCharStep(3);
+        document.getElementById('charPrevBtn').onclick = () => switchCharStep(currentCharacterModalStep - 1);
+        
+        // Import/Export/Reset (Simplified)
+        document.getElementById('exportProjectBtn').onclick = () => {
+            const safeFilename = state.projectTitle
+                ? state.projectTitle.replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').substring(0, 50)
+                : "KreatorStudio_Project";
+            saveAs(new Blob([JSON.stringify({state, characters, storyboardData})], {type: "application/json"}), `${safeFilename}.json`);
+            showNotification("Project exported successfully! 💾");
+        };
+        
+        document.getElementById('importProjectBtn').onclick = () => document.getElementById('importFileInput').click();
+        document.getElementById('importFileInput').onchange = (e) => {
+            const r = new FileReader(); r.onload = (ev) => { 
+                const d = JSON.parse(ev.target.result); state = d.state; characters = d.characters; storyboardData = d.storyboardData || [];
+                // Restore input values from state
+                if(state.projectTitle) els.projectTitleInput.value = state.projectTitle;
+                if(state.timeSetting) els.timeSettingInput.value = state.timeSetting;
+                if(state.locationSet) {
+                    els.locationSetInput.value = state.locationSet;
+                    els.customLocationInput.classList.toggle('hidden', state.locationSet !== 'custom_location');
+                    if(state.customLocation) els.customLocationInput.value = state.customLocation; // Restore custom text if any (though state.customLocation wasn't explicitly saved in input listener previously, better to just rely on scenario/render)
+                }
+                if(state.scenario) els.scenarioInput.value = state.scenario;
+                
+                renderCharacters(); updateUIState(); showNotification("Project loaded!"); 
+            }; r.readAsText(e.target.files[0]); 
+        };
+        document.getElementById('resetProjectBtn').onclick = () => { state = {...defaultState}; characters=[]; renderCharacters(); els.scenarioInput.value=''; els.projectTitleInput.value=''; showNotification("System Reset Complete!"); };
+
+        const storedKey = localStorage.getItem('didikIdApiKey');
+        if(storedKey) document.getElementById('apiKeyInput').value = storedKey;
+        renderTemplates(); renderCharacters();
+    });
+    </script>
+</body>
+</html>
