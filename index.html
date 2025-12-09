@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudioKreator Global</title>
+    <title>Studio Kreator Global</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -211,11 +211,11 @@
             <div class="max-w-7xl mx-auto flex justify-between items-center main-card p-3 border-cyan-900/30">
                 <div class="flex items-center gap-4">
                     <div class="relative">
-                        <img src="https://placehold.co/96x96/06b6d4/FFFFFF?text=KS&font=roboto" alt="KreatorStudio Logo" class="h-10 w-10 rounded-md shadow-lg border border-cyan-500/50">
+                        <img src="https://placehold.co/96x96/06b6d4/FFFFFF?text=KS&font=roboto" alt="KenugStudio Logo" class="h-10 w-10 rounded-md shadow-lg border border-cyan-500/50">
                         <div class="absolute -bottom-1 -right-1 bg-cyan-600 text-[8px] font-bold px-1 rounded border border-black text-white uppercase tracking-wide">PRO</div>
                     </div>
                     <h1 class="text-xl md:text-2xl font-extrabold tracking-tight flex flex-col items-start leading-none">
-                        <span class="app-title-color tracking-tighter">KreatorStudio.AI</span>
+                        <span class="app-title-color tracking-tighter">KenugStudio.AI</span>
                         <span class="text-[9px] text-cyan-600 font-mono font-bold tracking-[0.3em] uppercase">Generative Suite</span>
                     </h1>
                 </div>
@@ -624,9 +624,9 @@
 
         const templateCharacters = [
              { 
-                 name: "Pak Didik (Guru)", 
-                 brandName: "Pak Didik", 
-                 modelName: "Guru", 
+                 name: "Pak Budi (Anchor)", 
+                 brandName: "Pak Budi", 
+                 modelName: "Anchor", 
                  description: "Indonesian male, age 40, mature face, thin black hair, glasses, warm expression.",
                  outfits: { "Dinas": "wearing teacher uniform", "Jas": "wearing formal suit", "Batik": "wearing Batik shirt" },
                  currentOutfit: "wearing Batik shirt",
@@ -894,7 +894,7 @@ Output JSON: { "youtube_title": "...", "youtube_description": "...", "youtube_ta
                 const tags = document.getElementById('yt-tags').innerText; // Get tags
                 const thumb = document.getElementById('yt-thumb').innerText;
                 
-                const content = `--- KREATORSTUDIO.AI PROJECT ASSETS ---\n\n[JUDUL VIDEO]\n${title}\n\n[DESKRIPSI]\n${desc}\n\n[TAGS / HASHTAGS]\n${tags}\n\n[PROMPT THUMBNAIL]\n${thumb}\n\n-----------------------------`;
+                const content = `--- KENUGSTUDIO.AI PROJECT ASSETS ---\n\n[JUDUL VIDEO]\n${title}\n\n[DESKRIPSI]\n${desc}\n\n[TAGS / HASHTAGS]\n${tags}\n\n[PROMPT THUMBNAIL]\n${thumb}\n\n-----------------------------`;
                 
                 // Sanitize filename from project title
                 const safeFilename = state.projectTitle
@@ -1346,7 +1346,7 @@ Output JSON (Array of objects with 'scene_number', 'scene_title', 'scene_summary
         document.getElementById('exportProjectBtn').onclick = () => {
             const safeFilename = state.projectTitle
                 ? state.projectTitle.replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').substring(0, 50)
-                : "KreatorStudio_Project";
+                : "KenugStudio_Project";
             saveAs(new Blob([JSON.stringify({state, characters, storyboardData})], {type: "application/json"}), `${safeFilename}.json`);
             showNotification("Project exported successfully! 💾");
         };
